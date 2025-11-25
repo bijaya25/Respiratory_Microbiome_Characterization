@@ -1,22 +1,24 @@
-conda install -c bioconda fastp
+Se ejecutan los siguientes comandos en Visual Studio Code, secuencialmente as►1:
 
-# En Dataset
+# conda install -c bioconda fastp
 
-fastp -i CAMISIM_Illumina_R1.anonymous.G0_T0.fq.gz -I CAMISIM_Illumina_R2.anonymous.G0_T0.fq.gz -o R1_trimmed.fq.gz -O R2_trimmed.fq.gz --html fastp_report.html
+En carpeta Dataset dentro de la carpeta de proyecto microbioma en Visual Studio Code
 
-# Se generaron los archivos:
+# fastp -i CAMISIM_Illumina_R1.anonymous.G0_T0.fq.gz -I CAMISIM_Illumina_R2.anonymous.G0_T0.fq.gz -o R1_trimmed.fq.gz -O R2_trimmed.fq.gz --html fastp_report.html
+
+Se generaron los archivos:
 -rw-rw-r--   1 bijaya bijaya 2.2G Nov 25 16:05 R1_trimmed.fq.gz
 -rw-rw-r--   1 bijaya bijaya 2.2G Nov 25 16:05 R2_trimmed.fq.gz
 -rw-rw-r--   1 bijaya bijaya 135K Nov 25 16:05 fastp.json
 -rw-rw-r--   1 bijaya bijaya 477K Nov 25 16:05 fastp_report.html
 
-conda install -c bioconda megahit
+# conda install -c bioconda megahit
 
-# En Dataset
+En Dataset
 
-megahit -1 R1_trimmed.fq.gz -2 R2_trimmed.fq.gz -o megahit_output
+# megahit -1 R1_trimmed.fq.gz -2 R2_trimmed.fq.gz -o megahit_output
 
-# Se genera la carpeta megahit_output con los archivos:
+Se genera la carpeta megahit_output con los archivos:
 -rw-rw-r-- 1 bijaya bijaya  262 Nov 25 16:54 checkpoints.txt
 -rw-rw-r-- 1 bijaya bijaya    0 Nov 25 16:54 done
 -rw-rw-r-- 1 bijaya bijaya 319M Nov 25 16:54 final.contigs.fa
@@ -24,13 +26,13 @@ drwxrwxr-x 2 bijaya bijaya 4.0K Nov 25 16:54 intermediate_contigs
 -rw-rw-r-- 1 bijaya bijaya 161K Nov 25 16:54 log
 -rw-rw-r-- 1 bijaya bijaya  993 Nov 25 16:19 options.json
 
-conda install -c bioconda metabat2
+# conda install -c bioconda metabat2
 
-# En Dataset
+En Dataset
 
-metabat2 -i megahit_output/final.contigs.fa -o bins/bin
+# metabat2 -i megahit_output/final.contigs.fa -o bins/bin
 
-# MetaBAT2 generará archivos de binning en el directorio bins/, donde cada archivo de bin representará un MAG:
+MetaBAT2 generará archivos de binning en el directorio bins/, donde cada archivo de bin representará un MAG:
 total 112M
 -rw-rw-r-- 1 bijaya bijaya 3.6M Nov 25 17:03 bin.10.fa
 -rw-rw-r-- 1 bijaya bijaya 7.2M Nov 25 17:03 bin.11.fa
@@ -68,14 +70,14 @@ total 112M
 
 conda install -c bioconda quast
 
-# En Dataset
+En Dataset
 
 quast.py megahit_output/final.contigs.fa -o quast_output
 
 
 conda install -c bioconda busco
 
-# En Dataset
+En Dataset
 
 busco -i bins/bin_1.fa -o busco_output -l bacteria_odb10 -m geno
 
