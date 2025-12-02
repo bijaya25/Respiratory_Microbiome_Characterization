@@ -66,7 +66,7 @@ total 112M
 -rw-rw-r-- 1 bijaya bijaya 3.4M Nov 25 17:03 bin.8.fa  
 -rw-rw-r-- 1 bijaya bijaya 2.8M Nov 25 17:03 bin.9.fa  
 
-# Creación de entorno para instalación de Quast y Busco
+# Creación de entorno para instalación de Quast
 
 QUAST ya no se puede instalar con conda en Linux debido a conflictos irreparables de dependencias:
 
@@ -105,12 +105,44 @@ drwxrwxr-x 2 bijaya bijaya 4.0K Dec  2 12:01 icarus_viewers
 -rw-rw-r-- 1 bijaya bijaya  552 Dec  2 12:01 transposed_report.tsv  
 -rw-rw-r-- 1 bijaya bijaya 1005 Dec  2 12:01 transposed_report.txt  
 
+# Creación de entorno exclusivo para Busco
 
+BUSCO sí funciona perfectamente con conda, pero requiere un entorno aislado y versiones estrictas, no basta con ejecutar:  
 conda install -c bioconda busco
+
+BUSCO requiere: Python 3.7–3.10 , augustus , blast o diamond , hmmer  
+
+# conda create -n busco-env python=3.10 -y
+# conda activate busco-env 
+# conda install -c conda-forge -c bioconda busco=5.7.1
+# busco --version      (BUSCO 5.7.1)  
 
 En Dataset
 
-busco -i bins/bin_1.fa -o busco_output -l bacteria_odb10 -m geno
+# busco -i bins/bin.1.fa -o test_bin1 -l bacteria_odb10 -m genome
+
+-l bacteria_odb10 especifica el conjunto de referencia de genes (en este caso, para bacterias).
+-m genome le indica a BUSCO que use un modo genómico.  
+
+Resultado:  
+
+    ---------------------------------------------------
+    |Results from dataset bacteria_odb10               |
+    ---------------------------------------------------
+    |C:66.9%[S:66.9%,D:0.0%],F:8.1%,M:25.0%,n:124      |
+    |83    Complete BUSCOs (C)                         |
+    |83    Complete and single-copy BUSCOs (S)         |
+    |0    Complete and duplicated BUSCOs (D)           |
+    |10    Fragmented BUSCOs (F)                       |
+    |31    Missing BUSCOs (M)                          |
+    |124    Total BUSCO groups searched                |
+    ---------------------------------------------------
+
+
+
+
+
+
 
 
 
