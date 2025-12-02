@@ -1,42 +1,64 @@
 # Pipeline bioinformático en Bash
 
-## Instalación de fastp
+## Instalación y ejecución de fastp
 
 ``` bash
 conda install -c bioconda fastp
 ```
+  
+En carpeta Dataset dentro de la carpeta de proyecto microbioma:
 
-En carpeta Dataset dentro de la carpeta de proyecto microbioma en Visual Studio Code
-
-# fastp -i CAMISIM_Illumina_R1.anonymous.G0_T0.fq.gz -I CAMISIM_Illumina_R2.anonymous.G0_T0.fq.gz -o R1_trimmed.fq.gz -O R2_trimmed.fq.gz --html fastp_report.html
+``` bash
+fastp -i CAMISIM_Illumina_R1.anonymous.G0_T0.fq.gz -I CAMISIM_Illumina_R2.anonymous.G0_T0.fq.gz -o R1_trimmed.fq.gz -O R2_trimmed.fq.gz --html fastp_report.html
+```
 
 Se generaron los archivos:  
+
+``` bash
 -rw-rw-r--   1 bijaya bijaya 2.2G Nov 25 16:05 R1_trimmed.fq.gz    **  
 -rw-rw-r--   1 bijaya bijaya 2.2G Nov 25 16:05 R2_trimmed.fq.gz    **  
 -rw-rw-r--   1 bijaya bijaya 135K Nov 25 16:05 fastp.json  
 -rw-rw-r--   1 bijaya bijaya 477K Nov 25 16:05 fastp_report.html   **
+```
 
-# conda install -c bioconda megahit
+## Instalación y ejecución de megahit
+
+``` bash
+conda install -c bioconda megahit
+```
 
 En Dataset
 
-# megahit -1 R1_trimmed.fq.gz -2 R2_trimmed.fq.gz -o megahit_output
+``` bash
+megahit -1 R1_trimmed.fq.gz -2 R2_trimmed.fq.gz -o megahit_output
+```
 
 Se genera la carpeta megahit_output con los archivos:  
+
+``` bash
 -rw-rw-r-- 1 bijaya bijaya  262 Nov 25 16:54 checkpoints.txt  
 -rw-rw-r-- 1 bijaya bijaya    0 Nov 25 16:54 done  
 -rw-rw-r-- 1 bijaya bijaya 319M Nov 25 16:54 final.contigs.fa       **  
 drwxrwxr-x 2 bijaya bijaya 4.0K Nov 25 16:54 intermediate_contigs  
 -rw-rw-r-- 1 bijaya bijaya 161K Nov 25 16:54 log  
 -rw-rw-r-- 1 bijaya bijaya  993 Nov 25 16:19 options.json  
+```
 
-# conda install -c bioconda metabat2
+## Instalación y ejecución de metabat2
+
+``` bash
+conda install -c bioconda metabat2
+``` 
 
 En Dataset
 
+``` bash
 # metabat2 -i megahit_output/final.contigs.fa -o bins/bin
+```
 
 MetaBAT2 generará archivos de binning en el directorio bins/, donde cada archivo de bin representará un MAG:  
+
+``` bash
 total 112M  
 -rw-rw-r-- 1 bijaya bijaya 3.6M Nov 25 17:03 bin.10.fa  
 -rw-rw-r-- 1 bijaya bijaya 7.2M Nov 25 17:03 bin.11.fa  
@@ -69,33 +91,46 @@ total 112M
 -rw-rw-r-- 1 bijaya bijaya 3.3M Nov 25 17:03 bin.7.fa  
 -rw-rw-r-- 1 bijaya bijaya 3.4M Nov 25 17:03 bin.8.fa  
 -rw-rw-r-- 1 bijaya bijaya 2.8M Nov 25 17:03 bin.9.fa  
+```
 
-# Creación de entorno para instalación de Quast
+## Creación de entorno para instalación de Quast
 
 QUAST ya no se puede instalar con conda en Linux debido a conflictos irreparables de dependencias:
 
+``` bash
 conda install -c bioconda quast
+```
 
 El paquete simplejson en conda-forge/bioconda NO tiene builds compatibles con Python 3.10+, y Quast lo requiere. Entonces, instalarlo con pip.
 
+``` bash
 # conda create -n quast-env python=3.10  
 # conda activate quast-env  
 # pip install quast  
+```
 
+``` bash
 which quast.py  
-which quast  
+which quast
+```
 
 Creación del comando **quast** dentro del entorno. Esto crea un pequeño script que llama a quast.py con Python:  
 
+``` bash
 echo -e '#!/bin/bash\npython /home/warehouse/users/bijaya/Software/yes/envs/quast-env/bin/quast.py "$@"' > /home/warehouse/users/bijaya/Software/yes/envs/quast-env/bin/quast  
 chmod +x /home/warehouse/users/bijaya/Software/yes/envs/quast-env/bin/quast  
 quast --version      (QUAST v5.2.0)  
+```
 
 En Dataset
 
-# quast.py megahit_output/final.contigs.fa -o quast_output
+``` bash
+quast.py megahit_output/final.contigs.fa -o quast_output
+```
 
 El directorio quast_output guarda los resultados de la evaluación y genera un informe con métricas de calidad del ensamblaje.  
+
+``` bash
 total 724K  
 drwxrwxr-x 2 bijaya bijaya 4.0K Dec  2 12:01 basic_stats  
 -rw-rw-r-- 1 bijaya bijaya  53K Dec  2 12:01 icarus.html  
@@ -108,22 +143,27 @@ drwxrwxr-x 2 bijaya bijaya 4.0K Dec  2 12:01 icarus_viewers
 -rw-rw-r-- 1 bijaya bijaya 1.1K Dec  2 12:01 transposed_report.tex  
 -rw-rw-r-- 1 bijaya bijaya  552 Dec  2 12:01 transposed_report.tsv  
 -rw-rw-r-- 1 bijaya bijaya 1005 Dec  2 12:01 transposed_report.txt  
+```
 
-# Creación de entorno exclusivo para Busco
+## Creación de entorno exclusivo para Busco
 
 BUSCO sí funciona perfectamente con conda, pero requiere un entorno aislado y versiones estrictas, no basta con ejecutar:  
 conda install -c bioconda busco
 
 BUSCO requiere: Python 3.7–3.10 , augustus , blast o diamond , hmmer  
 
-# conda create -n busco-env python=3.10 -y
-# conda activate busco-env 
-# conda install -c conda-forge -c bioconda busco=5.7.1
-# busco --version      (BUSCO 5.7.1)  
+``` bash
+conda create -n busco-env python=3.10 -y
+conda activate busco-env 
+conda install -c conda-forge -c bioconda busco=5.7.1
+busco --version      (BUSCO 5.7.1)  
+```
 
 En Dataset
 
-# busco -i bins/bin.1.fa -o test_bin1 -l bacteria_odb10 -m genome
+``` bash
+busco -i bins/bin.1.fa -o test_bin1 -l bacteria_odb10 -m genome
+```
 
 -l bacteria_odb10 especifica el conjunto de referencia de genes (en este caso, para bacterias).
 -m genome le indica a BUSCO que use un modo genómico.  
@@ -142,7 +182,10 @@ Resultado:
     |124    Total BUSCO groups searched                |
     ---------------------------------------------------
 
-# for file in bins/*.fa; do
+## Ejecución de BUSCO en bucle:
+
+``` bash
+for file in bins/*.fa; do
     name=$(basename "$file" .fa)
     busco -i "$file" \
           -o "busco_${name}" \
@@ -150,9 +193,11 @@ Resultado:
           -m genome \
           --cpu 16 &
 done
+```
 
 Se generaron las carpetas por cada bin:  
 
+``` bash
 drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.1  
 drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.10  
 drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.11  
@@ -184,11 +229,13 @@ drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.6
 drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.7  
 drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.8  
 drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.9  
+```
 
 Observando rápidamente los resultados por cada bin:
 
 find . -name "short_summary.txt" -exec awk '/C:/{print FILENAME "\t" $0}' {} \;  
 
+``` bash
 ./busco_bin.28/run_bacteria_odb10/short_summary.txt             C:19.4%[S:19.4%,D:0.0%],F:10.5%,M:70.1%,n:124      
 ./busco_bin.26/run_bacteria_odb10/short_summary.txt             C:37.1%[S:33.1%,D:4.0%],F:12.9%,M:50.0%,n:124      
 ./busco_bin.11/run_bacteria_odb10/short_summary.txt             C:71.0%[S:62.9%,D:8.1%],F:5.6%,M:23.4%,n:124       
@@ -219,4 +266,4 @@ find . -name "short_summary.txt" -exec awk '/C:/{print FILENAME "\t" $0}' {} \;
 ./busco_bin.1/run_bacteria_odb10/short_summary.txt              C:66.9%[S:66.9%,D:0.0%],F:8.1%,M:25.0%,n:124       
 ./busco_bin.8/run_bacteria_odb10/short_summary.txt              C:91.9%[S:91.1%,D:0.8%],F:2.4%,M:5.7%,n:124        
 ./busco_bin.12/run_bacteria_odb10/short_summary.txt             C:53.2%[S:53.2%,D:0.0%],F:1.6%,M:45.2%,n:124 
-
+``` 
