@@ -138,11 +138,81 @@ Resultado:
     |124    Total BUSCO groups searched                |
     ---------------------------------------------------
 
+# for file in bins/*.fa; do
+    name=$(basename "$file" .fa)
+    busco -i "$file" \
+          -o "busco_${name}" \
+          -l bacteria_odb10 \
+          -m genome \
+          --cpu 16 &
+done
 
+Se generaron las carpetas por cada bin:  
 
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.1  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.10  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.11  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.12  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.13  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.14  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.15  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:26 busco_bin.16  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.17  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.18  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.19  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.2  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.20  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:26 busco_bin.21  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.22  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.23  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.24  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.25  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.26  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.27  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.28  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.29  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.3  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.30  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.31  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:26 busco_bin.4  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.5  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.6  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:25 busco_bin.7  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.8  
+drwxrwxr-x 5 bijaya bijaya 4.0K Dec  2 13:27 busco_bin.9  
 
+Observando rápidamente los resultados por cada bin:
 
+find . -name "short_summary.txt" -exec awk '/C:/{print FILENAME "\t" $0}' {} \;  
 
-
-
+./busco_bin.28/run_bacteria_odb10/short_summary.txt             C:19.4%[S:19.4%,D:0.0%],F:10.5%,M:70.1%,n:124      
+./busco_bin.26/run_bacteria_odb10/short_summary.txt             C:37.1%[S:33.1%,D:4.0%],F:12.9%,M:50.0%,n:124      
+./busco_bin.11/run_bacteria_odb10/short_summary.txt             C:71.0%[S:62.9%,D:8.1%],F:5.6%,M:23.4%,n:124       
+./busco_bin.7/run_bacteria_odb10/short_summary.txt              C:82.3%[S:69.4%,D:12.9%],F:8.1%,M:9.6%,n:124       
+./busco_bin.14/run_bacteria_odb10/short_summary.txt             C:57.3%[S:56.5%,D:0.8%],F:14.5%,M:28.2%,n:124      
+./busco_bin.10/run_bacteria_odb10/short_summary.txt             C:71.0%[S:70.2%,D:0.8%],F:3.2%,M:25.8%,n:124       
+./busco_bin.17/run_bacteria_odb10/short_summary.txt             C:53.2%[S:52.4%,D:0.8%],F:14.5%,M:32.3%,n:124      
+./busco_bin.20/run_bacteria_odb10/short_summary.txt             C:20.2%[S:20.2%,D:0.0%],F:8.9%,M:70.9%,n:124       
+./busco_bin.24/run_bacteria_odb10/short_summary.txt             C:12.1%[S:12.1%,D:0.0%],F:7.3%,M:80.6%,n:124       
+./busco_bin.6/run_bacteria_odb10/short_summary.txt              C:13.7%[S:13.7%,D:0.0%],F:4.8%,M:81.5%,n:124       
+./busco_bin.25/run_bacteria_odb10/short_summary.txt             C:6.5%[S:6.5%,D:0.0%],F:4.8%,M:88.7%,n:124         
+./busco_bin.23/run_bacteria_odb10/short_summary.txt             C:96.8%[S:96.0%,D:0.8%],F:0.8%,M:2.4%,n:124        
+./busco_bin.9/run_bacteria_odb10/short_summary.txt              C:59.7%[S:39.5%,D:20.2%],F:3.2%,M:37.1%,n:124      
+./busco_bin.22/run_bacteria_odb10/short_summary.txt             C:42.7%[S:41.9%,D:0.8%],F:16.9%,M:40.4%,n:124      
+./busco_bin.30/run_bacteria_odb10/short_summary.txt             C:89.5%[S:86.3%,D:3.2%],F:1.6%,M:8.9%,n:124        
+./busco_bin.3/run_bacteria_odb10/short_summary.txt              C:46.8%[S:46.8%,D:0.0%],F:8.9%,M:44.3%,n:124       
+./busco_bin.5/run_bacteria_odb10/short_summary.txt              C:25.0%[S:25.0%,D:0.0%],F:10.5%,M:64.5%,n:124      
+./busco_bin.18/run_bacteria_odb10/short_summary.txt             C:88.7%[S:87.1%,D:1.6%],F:5.6%,M:5.7%,n:124        
+./busco_bin.15/run_bacteria_odb10/short_summary.txt             C:8.1%[S:8.1%,D:0.0%],F:4.8%,M:87.1%,n:124         
+./busco_bin.27/run_bacteria_odb10/short_summary.txt             C:97.6%[S:97.6%,D:0.0%],F:0.8%,M:1.6%,n:124        
+./busco_bin.29/run_bacteria_odb10/short_summary.txt             C:5.6%[S:5.6%,D:0.0%],F:5.6%,M:88.8%,n:124         
+./busco_bin.19/run_bacteria_odb10/short_summary.txt             C:68.5%[S:68.5%,D:0.0%],F:8.9%,M:22.6%,n:124       
+./busco_bin.31/run_bacteria_odb10/short_summary.txt             C:19.4%[S:19.4%,D:0.0%],F:8.1%,M:72.5%,n:124       
+./test_bin1/run_bacteria_odb10/short_summary.txt                C:66.9%[S:66.9%,D:0.0%],F:8.1%,M:25.0%,n:124       
+./busco_bin.4/run_bacteria_odb10/short_summary.txt              C:4.0%[S:4.0%,D:0.0%],F:4.0%,M:92.0%,n:124         
+./busco_bin.21/run_bacteria_odb10/short_summary.txt             C:16.9%[S:16.1%,D:0.8%],F:8.9%,M:74.2%,n:124       
+./busco_bin.13/run_bacteria_odb10/short_summary.txt             C:16.9%[S:16.9%,D:0.0%],F:12.9%,M:70.2%,n:124      
+./busco_bin.1/run_bacteria_odb10/short_summary.txt              C:66.9%[S:66.9%,D:0.0%],F:8.1%,M:25.0%,n:124       
+./busco_bin.8/run_bacteria_odb10/short_summary.txt              C:91.9%[S:91.1%,D:0.8%],F:2.4%,M:5.7%,n:124        
+./busco_bin.12/run_bacteria_odb10/short_summary.txt             C:53.2%[S:53.2%,D:0.0%],F:1.6%,M:45.2%,n:124 
 
