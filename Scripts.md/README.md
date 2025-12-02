@@ -1,6 +1,10 @@
-Se ejecutan los siguientes comandos en Visual Studio Code, secuencialmente as►1:
+# Pipeline bioinformático en Bash
 
-# conda install -c bioconda fastp
+## Instalación de fastp
+
+``` bash
+conda install -c bioconda fastp
+```
 
 En carpeta Dataset dentro de la carpeta de proyecto microbioma en Visual Studio Code
 
