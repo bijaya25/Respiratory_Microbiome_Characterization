@@ -53,7 +53,7 @@ conda install -c bioconda metabat2
 En Dataset
 
 ``` bash
-# metabat2 -i megahit_output/final.contigs.fa -o bins/bin
+metabat2 -i megahit_output/final.contigs.fa -o bins/bin
 ```
 
 MetaBAT2 generará archivos de binning en el directorio bins/, donde cada archivo de bin representará un MAG:  
