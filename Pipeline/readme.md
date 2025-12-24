@@ -174,7 +174,6 @@ workflow {
 
     BUSCO(bins)
 }
-
 ```
 
 
