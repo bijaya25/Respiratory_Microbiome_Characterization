@@ -6,6 +6,77 @@ Los archivos con los que se están probando los scripts son:
 Se pueden descargar de esta web: https://zenodo.org/records/5155395
 
 ```mermaid
-flowchart TB %% === Inputs === A[FASTQ crudos<br/>Objetivo: lecturas originales]:::input %% === Preprocesamiento === B[FastQC v0.11.9<br/>Objetivo: evaluar calidad]:::program C[Fastp v0.23 / Cutadapt v4.4<br/>Objetivo: trimming y filtros]:::program D[Bowtie2 v2.5 / HRRT<br/>Objetivo: remover huésped]:::program E[FASTQ filtrados<br/>Objetivo: microbioma limpio]:::output %% === Perfilado funcional (HUMAnN) === F[MetaPhlAn2 v2.9<br/>Objetivo: especies presentes]:::program G[DIAMOND v2.1 / Bowtie2<br/>Objetivo: mapear funciones]:::program H[HUMAnN v3.0<br/>Objetivo: perfil funcional]:::program DB1[UniRef90 / UniRef50<br/>Proteínas]:::database DB2[MetaCyc<br/>Rutas metabólicas]:::database O1[genefamilies.tsv<br/>Objetivo: genes cuantificados]:::output O2[pathabundance.tsv<br/>Objetivo: abundancia rutas]:::output O3[pathcoverage.tsv<br/>Objetivo: cobertura rutas]:::output %% === Virulencia y resistencia === I[DIAMOND BLASTx<br/>Objetivo: genes patogénicos]:::program DB3[VFDB<br/>Virulencia]:::database DB4[CARD / ResFinder<br/>Resistencia]:::database O4[Tablas VF/ARG<br/>Objetivo: perfiles resistencia]:::output %% === Perfil taxonómico y diversidad === J[MetaPhlAn4 v4.0<br/>Objetivo: taxonomía especie]:::program K[R + vegan<br/>Objetivo: diversidad alfa/beta]:::program L[NMDS<br/>Objetivo: visualizar agrupamientos]:::program %% === Correlaciones clínicas === M[featureCounts / HTSeq<br/>Objetivo: conteos crudos]:::program N[DESeq2<br/>Objetivo: diferencial funciones]:::program O[SPIEC-EASI<br/>Objetivo: redes co-ocurrencia]:::program P[Cytoscape v3.10<br/>Objetivo: visualizar redes]:::program %% === Machine learning y estadística === Q[Random Forest<br/>Objetivo: clasificar estados]:::program R[Regresión logística<br/>Objetivo: asociación clínica]:::program S[R / Stata MP<br/>Objetivo: estadística global]:::program %% === Flujo === A --> B --> C --> D --> E E --> F --> H H --> G G --> DB1 H --> DB2 G --> O1 H --> O2 --> O3 E --> I I --> DB3 --> O4 I --> DB4 --> O4 E --> J --> K --> L H --> M --> N H --> O --> P O2 --> Q Q --> R R --> S
+flowchart LR
+
+
+%% INPUT
+A[FASTQ metagenómicos<br/>Datos crudos]:::input
+
+
+%% QC
+B[FastQC<br/>Control de calidad]:::tool
+C[Fastp / Cutadapt<br/>Trimming lecturas]:::tool
+D[Bowtie2 / HRRT<br/>Remoción ADN humano]:::tool
+E[Lecturas microbioma<br/>Datos limpios]:::output
+
+
+A --> B --> C --> D --> E
+
+
+%% HUMANN CORE
+F[MetaPhlAn2<br/>Preclasificación especies]:::tool
+G[DIAMOND / Bowtie2<br/>Mapeo funcional]:::tool
+H[UniRef90/50<br/>Familias génicas]:::database
+I[MetaCyc<br/>Rutas metabólicas]:::database
+
+
+J[Genes y rutas<br/>Abundancias normalizadas]:::output
+
+
+E --> F --> G
+H --> G --> J
+J --> I --> J
+
+
+%% VIRULENCE / ARG
+K[DIAMOND BLASTx<br/>Genes patogénicos]:::tool
+L[VFDB / CARD / ResFinder<br/>Virulencia y ARGs]:::database
+M[Tablas VF–ARGs<br/>Abundancias]:::output
+
+
+E --> K
+L --> K --> M
+
+
+%% TAXONOMY & DIVERSITY
+N[MetaPhlAn4<br/>Perfil taxonómico]:::tool
+O[Diversidad (R vegan)<br/>Alfa y beta]:::tool
+P[NMDS<br/>Visualización]:::output
+
+
+E --> N --> O --> P
+
+
+%% STAT & BIOMARKERS
+Q[DESeq2<br/>Análisis diferencial]:::tool
+R[SPIEC-EASI<br/>Redes microbianas]:::tool
+S[Random Forest<br/>Clasificación NAC]:::tool
+T[Regresión logística<br/>Asociación clínica]:::tool
+
+
+U[Biomarcadores<br/>Resultados finales]:::output
+
+
+J --> Q --> U
+J --> R --> U
+J --> S --> U
+U --> T --> U
+
+
+%% CLASSES
+classDef tool fill:#4F81BD,color:#ffffff,stroke:#2F5597
+classDef database fill:#6AA84F,color:#ffffff,stroke:#38761D
+classDef input fill:#B7B7B7,color:#000000,stroke:#7F7F7F
+classDef output fill:#F6B26B,color:#000000,stroke:#E69138
 ```
 
